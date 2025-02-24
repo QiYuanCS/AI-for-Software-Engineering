@@ -55,7 +55,7 @@ async def ask_book(query: str, return_image: bool = False):
 
     # TODO: Implement answer generation 
     # 1. Format prompt with context and query
-    # 2. Get response from LLM
+    # 2. Get response from LLM (use services.llm module for this)
     # 3. Package results with page number and context
     pass
 
@@ -102,7 +102,7 @@ async def __calculate_embeddings(client: OpenAI, documents: List[str], batch_siz
     Get embeddings for text chunks using OpenAI's API.
     
     Hint: http://aitools.cs.vt.edu:8888/notebooks/module5/embeddings-tutorial.ipynb shows how to calculate embeddings.
-    
+
     Args:
         client: OpenAI client instance
         documents: List of text chunks to embed
