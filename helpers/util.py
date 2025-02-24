@@ -54,4 +54,48 @@ async def chat(messages, prompt):
         st.session_state.messages = messages
     return messages
 
+async def ask_book(messages, prompt):
+    # TODO: Create an async function ask_book that takes a messages list and a prompt string as parameters
+    # TODO: This function will:
+    # 1. Use st.chat_message("user") to display the user's prompt in the chat UI using st.markdown(prompt)
+    # 2. Create an empty placeholder for the spinner using st.empty()
+    # 3. Inside st.chat_message("assistant"):
+    #    a. Show a loading spinner with message "Asking the Pragmatic Programmer book..."
+    #    b. Call services.rag.ask_book(prompt, return_image=True) which returns a dictionary with:
+    #       - answer: str - The AI-generated answer based on the book
+    #       - context: str - The relevant text snippets from the book
+    #       - page_number: int - The page number where the info was found
+    #       - image_data: bytes - The binary image data of the book page (if available)
+    #    c. Extract all returned values from rag_result using dictionary access:
+    #       answer = rag_result["answer"]
+    #       context = rag_result["context"]
+    #       page_number = rag_result["page_number"]
+    #       image_data = rag_result["image_data"]
+    #    d. Clear the spinner placeholder using spinner_placeholder.empty()
+    # 4. Display the response:
+    #    a. Show the answer using st.write(f"{answer}")
+    #    b. Handle the image data:
+    #       - If image_data exists:
+    #         * Import base64 module
+    #         * Convert bytes to base64 using base64.b64encode(image_data).decode('utf-8')
+    #         * Create HTML img tag: f'<img src="data:image/png;base64,{image_base64}" style="max-width: 100%;">'
+    #       - If no image_data:
+    #         * Set image_html to "No image available."
+    # 5. Create an evidence section using an f-string with:
+    #    - A div for the page number in gray 10pt font
+    #    - The image_html content
+    #    Format:
+    #    f"""
+    #      <div style="color: gray; font-size: 10pt;">Page Number: {page_number}</div>
+    #      {image_html}
+    #    """
+    # 6. Update the chat history:
+    #    a. Append the answer to messages with role "assistant"
+    #    b. Append the evidence to messages with:
+    #       - role: "evidence"
+    #       - content: the evidence f-string
+    #       - page_number: the page number
+    #    c. Update st.session_state.messages with the new messages
+    # 7. Return the messages list for chat history
+    pass
 
