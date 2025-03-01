@@ -1,9 +1,10 @@
+import base64
 from typing import List, Dict, Union, Tuple
 
 import streamlit as st
 from streamlit.delta_generator import DeltaGenerator
-
 import services.llm
+import services.rag
 
 async def run_conversation(messages: List[Dict[str, str]], message_placeholder: Union[DeltaGenerator, None] = None) \
         -> Tuple[List[Dict[str, str]], str]:
@@ -97,5 +98,59 @@ async def ask_book(messages, prompt):
     #       - page_number: the page number
     #    c. Update st.session_state.messages with the new messages
     # 7. Return the messages list for chat history
-    pass
+    # Display user's prompt
+    with st.chat_message("user"):
+        st.markdown(prompt)
 
+    # Placeholder for spinner
+    spinner_placeholder = st.empty()
+
+    with st.chat_message("assistant"):
+        # Show spinner while fetching response
+        with spinner_placeholder:
+            with st.spinner("Asking the Pragmatic Programmer book..."):
+                # Call rag.ask_book to get the response with context and image
+                rag_result = await services.rag.ask_book(prompt, return_image=True)
+
+        # Extract results from rag_result
+        answer = rag_result["answer"]
+        context = rag_result["context"]
+        page_number = rag_result["page_number"]
+        image_data = rag_result["image_data"]
+
+        # Clear the spinner
+        spinner_placeholder.empty()
+
+        # Display the answer
+        st.write(f"{answer}")
+
+        # Handle image data
+        if image_data:
+            # Convert image bytes to base64 for HTML display
+            image_base64 = base64.b64encode(image_data).decode('utf-8')
+            image_html = f'<img src="data:image/png;base64,{image_base64}" style="max-width: 100%;">'
+        else:
+            image_html = "No image available."
+
+        # Create evidence section
+        evidence_html = f"""
+                <div style="color: gray; font-size: 10pt;">Page Number: {page_number}</div>
+                {image_html}
+            """
+
+        # Update chat history
+        messages.append({"role": "assistant", "content": answer})
+        messages.append({
+            "role": "evidence",
+            "content": evidence_html,
+            "page_number": page_number
+        })
+
+        # Update Streamlit session state
+        st.session_state.messages = messages
+
+        # Display evidence in an expandable section
+        with st.expander("Evidence"):
+            st.markdown(evidence_html, unsafe_allow_html=True)
+
+    return messages

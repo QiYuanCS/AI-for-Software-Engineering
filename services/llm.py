@@ -14,7 +14,7 @@ load_dotenv()
 
 openai_model = os.getenv('OPENAI_API_MODEL')
 
-def converse_sync(prompt: str, messages: List[Dict[str, str]], model="gpt-3.5-turbo") -> Tuple[str, List[Dict[str, str]]]:
+def converse_sync(prompt: str, messages: List[Dict[str, str]], model="gpt-4-turbo-preview") -> Tuple[str, List[Dict[str, str]]]:
     client = OpenAI(
         api_key=os.getenv('OPENAI_API_KEY'),
         base_url=os.getenv('OPENAI_API_BASE_URL'))

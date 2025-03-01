@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y \
     nano \
     curl \
     software-properties-common \
+    poppler-utils \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
