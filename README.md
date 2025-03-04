@@ -1,5 +1,6 @@
 
 AI Software Engineering Project: Programming Assistant Development - Python, Streamlit, OpenAI API, Docker
+
 • Developed the Ducky programming assistant based on GPT and LLM, providing code suggestions, code review, and debugging support, with natural language code modification capabilities.
 
 
